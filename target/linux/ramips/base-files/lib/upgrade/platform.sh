@@ -55,6 +55,18 @@ platform_do_upgrade() {
 		}
 		default_do_upgrade "$1"
 		;;
+	ampedwireless,ally-r1900k)
+		if [ "$(fw_printenv -n bootImage 2>/dev/null)" == "1" ]; then
+			fw_setenv bootImage 0 || exit 1
+			# This is a global defined in nand.sh, sets partition kernel will be flashed into
+			CI_KERNPART=kernel1
+			#CI_ROOTPART=rootfs1
+		else
+			fw_setenv bootImage 1 || exit 1
+			CI_KERNPART=kernel2
+			#CI_ROOTPART=rootfs2
+		fi
+		;;
 	hc5962|\
 	r6220|\
 	netgear,r6350|\

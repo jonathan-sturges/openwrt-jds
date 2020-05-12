@@ -108,6 +108,18 @@ define Device/alfa-network_quad-e4g
 endef
 TARGET_DEVICES += alfa-network_quad-e4g
 
+define Device/ampedwireless_ally-r1900k
+  IMAGE_SIZE := 32768k
+  DEVICE_VENDOR := AmpedWireless
+  DEVICE_MODEL := ALLY-R1900K
+  IMAGES += factory.bin
+  IMAGE/factory.bin := append-kernel | append-rootfs | \
+	edimax-header -s CSYS -m RN68 -f 0x001c0000 -S 0x01100000 | pad-rootfs | \
+	append-metadata | check-size
+  DEVICE_PACKAGES := kmod-mt7615e kmod-i2c-core kmod-i2c-mt7628 kmod-usb3 wpad-basic i2c-tools uboot-envtools
+endef
+TARGET_DEVICES += ampedwireless_ally-r1900k
+
 define Device/asus_rt-ac57u
   DTS := RT-AC57U
   DEVICE_TITLE := ASUS RT-AC57U
