@@ -1,0 +1,122 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+/dts-v1/;
+
+#include "R1900K.dtsi"
+
+/ {
+	compatible = "ampedwireless,ally-r1900k", "mediatek,mt7621-soc";
+	model = "Amped Wireless ALLY R1900K";
+
+	aliases {
+		led-boot = &led_status_amber;
+		led-failsafe = &led_status_amber;
+		led-running = &led_status_green;
+		led-upgrade = &led_status_amber;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led_status_green: status_green {
+			label = "r1900k:green:status";
+			gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
+		};
+
+		led_status_amber: status_amber {
+			label = "r1900k:amber:status";
+			gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
+		};
+
+	};
+};
+
+&nand {
+	status = "okay";
+
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		partition@0 {
+			label = "u-boot";
+			reg = <0x0 0x80000>;
+			read-only;
+		};
+
+		partition@80000 {
+			label = "u-boot-env";
+			reg = <0x80000 0x80000>;
+		};
+
+		factory: partition@100000 {
+			label = "factory";
+			reg = <0x100000 0x40000>;
+			read-only;
+		};
+
+		/* uboot expects to find kernels at 0x140000 & 0x2140000,
+		 * referred to as Uimage & Uimage1 in factory FW, respectively.
+		 * (I expected Uimage2 (0x4140000) to be a recovery image,
+		 * but that region is actually blank)
+		 * a kernel is considered suitable for handing control over
+		 * if its linux magic number exists & uImage CRC are correct.
+		 * If either of those conditions fail, 'bootImage' value
+		 * is toggled in uboot env & a restart performed in the hope that the
+		 * alternate kernel is okay.
+		 * if neither kernel checksums ok and both are marked failed, system 2
+		 * is booted anyway.
+		 *
+		 * Note uboot's tftp flash install writes the transferred
+		 * image to both kernel partitions.
+		 */
+
+		/* kernel and rootfs are auto-split within firmware partitions */
+		partition@140000 {
+			label = "firmware";
+			reg = <0x140000 0x2000000>;	/* 32MB */
+			read-only;
+			compatible = "denx,uimage";
+		};
+
+		partition@2140000 {
+			label = "firmware2";
+			reg = <0x2140000 0x2000000>;	/* 32MB */
+			compatible = "denx,uimage";
+		};
+
+		partition@4140000 {
+			label = "unused";
+			reg = <0x4140000 0x2000000>;	/* 32MB */
+		};
+
+		partition@6140000 {
+			label = "chime";
+			reg = <0x6140000 0xa00000>;
+		};
+
+		partition@6b40000 {
+			label = "data";
+			reg = <0x6b40000 0xa00000>;
+		};
+
+		partition@7540000 {
+			label = "reserved";
+			reg = <0x7540000 0x840000>;
+			read-only;
+		};
+
+		partition@7d80000 {
+			label = "nvram";
+			reg = <0x7d80000 0x100000>;
+			read-only;
+		};
+
+		partition@7e80000 {
+			label = "hwconfig";
+			reg = <0x7e80000 0x100000>;
+			read-only;
+		};
+	};
+};
+
