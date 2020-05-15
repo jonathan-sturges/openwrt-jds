@@ -55,6 +55,7 @@ platform_do_upgrade() {
 		}
 		default_do_upgrade "$1"
 		;;
+	ampedwireless,ally-00x19k|\
 	ampedwireless,ally-r1900k)
 		if [ "$(fw_printenv -n bootImage 2>/dev/null)" == "1" ]; then
 			fw_setenv bootImage 0 || exit 1

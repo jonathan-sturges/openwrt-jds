@@ -4,8 +4,8 @@
 #include "Amped-Wireless.dtsi"
 
 / {
-	compatible = "ampedwireless,ally-r1900k", "mediatek,mt7621-soc";
-	model = "Amped Wireless ALLY R1900K";
+	compatible = "ampedwireless,ally-00x19k", "mediatek,mt7621-soc";
+	model = "Amped Wireless ALLY 00X19K";
 
 };
 
@@ -13,6 +13,6 @@
 	mtd-mac-address = <&factory 0x4>;
 
 	/* valid VLAN portmaps for mt7530 are "llllw", "wllll", and "lwlll" */
-	mediatek,portmap = "wllll";
+	mediatek,portmap = "ll";
 
 };

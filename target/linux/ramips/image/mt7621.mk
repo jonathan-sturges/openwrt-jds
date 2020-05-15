@@ -111,15 +111,28 @@ TARGET_DEVICES += alfa-network_quad-e4g
 define Device/ampedwireless_ally-r1900k
   DTS := R1900K
   IMAGE_SIZE := 32768k
-  DEVICE_TITLE := Amped Wireless ALLY
+  DEVICE_TITLE := Amped Wireless ALLY-R1900K
   #DEVICE_MODEL := ALLY-R1900K
   IMAGES += factory.bin
   IMAGE/factory.bin := append-kernel | append-rootfs |\
 	  edimax-header -s CSYS -m RN68 -f 0x001c0000 -S 0x01100000 | pad-rootfs |\
 	  append-metadata | check-size $$$$(IMAGE_SIZE)
-  DEVICE_PACKAGES := kmod-mt7615e kmod-i2c-core kmod-i2c-mt7628 kmod-usb3 wpad-basic i2c-tools uboot-envtools
+  DEVICE_PACKAGES := kmod-mt7615e kmod-i2c-core kmod-i2c-mt7628 kmod-usb3 wpad-basic uboot-envtools irqbalance
 endef
 TARGET_DEVICES += ampedwireless_ally-r1900k
+
+define Device/ampedwireless_ally-00x19k
+  DTS := 00X19K
+  IMAGE_SIZE := 32768k
+  DEVICE_TITLE := Amped Wireless ALLY-00X19K
+  #DEVICE_MODEL := ALLY-00X19K
+  IMAGES += factory.bin
+  IMAGE/factory.bin := append-kernel | append-rootfs |\
+	  edimax-header -s CSYS -m RN69 -f 0x001c0000 -S 0x01100000 | pad-rootfs |\
+	  append-metadata | check-size $$$$(IMAGE_SIZE)
+  DEVICE_PACKAGES := kmod-mt7615e kmod-i2c-core kmod-i2c-mt7628 wpad-basic uboot-envtools irqbalance
+endef
+TARGET_DEVICES += ampedwireless_ally-00x19k
 
 define Device/asus_rt-ac57u
   DTS := RT-AC57U
