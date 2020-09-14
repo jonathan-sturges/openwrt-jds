@@ -20,6 +20,7 @@ ramips_setup_interfaces()
 	xiaomi,mir3g-v2)
 		ucidef_set_interfaces_lan_wan "lan1 lan2" "wan"
 		;;
+	ampedwireless,ally-00x19k|\
 	edimax,re23s|\
 	mikrotik,routerboard-m11g|\
 	netgear,ex6150|\
@@ -30,6 +31,7 @@ ramips_setup_interfaces()
 	ubnt,unifi-nanohd)
 		ucidef_set_interface_lan "lan"
 		;;
+	ampedwireless,ally-r1900k|\
 	gehua,ghl-r-001|\
 	hiwifi,hc5962|\
 	xiaomi,mi-router-ac2100|\
@@ -75,6 +77,15 @@ ramips_setup_macs()
 	local label_mac=""
 
 	case $board in
+	ampedwireless,ally-00x19k)
+		lan_mac=$(mtd_get_mac_ascii hwconfig HW.LAN.MAC.Address)
+		label_mac=$lan_mac
+		;;
+	ampedwireless,ally-r1900k)
+		lan_mac=$(mtd_get_mac_ascii hwconfig HW.LAN.MAC.Address)
+		wan_mac=$(mtd_get_mac_ascii hwconfig HW.WAN.MAC.Address)
+		label_mac=$lan_mac
+		;;
 	asus,rt-ac65p|\
 	asus,rt-ac85p)
 		wan_mac=$(mtd_get_mac_ascii u-boot-env et1macaddr)
